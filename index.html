@@ -3,343 +3,931 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>Permutasi &amp; Kombinasi</title>
-<link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600&family=Gaegu:wght@400;700&display=swap" rel="stylesheet">
+<title>Permutasi &amp; Kombinasi Master Suite</title>
+<link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600;700&family=Gaegu:wght@400;700&display=swap" rel="stylesheet">
 <style>
-:root{--bg:#d9c9a8;--bg2:#cdb98f;--paper:#ecdcc3;--ivory:#fbf6e9;--cream:#f7eed8;--wood:#8a4f30;--wood2:#6d3b22;--wood3:#a8683f;--ink:#5a3a28;--sage:#a9c18a;--sage2:#6f8f55;--peach:#f4c3a1;--butter:#f7e08f;--err:#b8402f;
-box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
-@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#4a3b2c;--bg2:#3e3226}}
-:root[data-theme="dark"]{--bg:#4a3b2c;--bg2:#3e3226}
-*{box-sizing:border-box}
-html{scroll-padding-top:env(safe-area-inset-top,0px)}
-body{margin:0;min-height:100vh;font-family:'Fredoka',system-ui,sans-serif;color:var(--ink);background:
-radial-gradient(circle at 12% 18%,rgba(169,193,138,.55) 0 90px,transparent 91px),
-radial-gradient(circle at 90% 78%,rgba(244,195,161,.6) 0 110px,transparent 111px),
-radial-gradient(circle at 80% 8%,rgba(247,224,143,.45) 0 70px,transparent 71px),
-var(--bg);background-attachment:fixed}
-.board{position:relative;max-width:1040px;margin:22px auto;padding:78px 22px 90px;background:var(--paper);border:12px solid #5d4332;border-radius:26px;box-shadow:0 14px 0 rgba(60,35,20,.25),0 24px 40px rgba(40,25,10,.35);
-background-image:linear-gradient(rgba(120,90,60,.1) 1px,transparent 1px),linear-gradient(90deg,rgba(120,90,60,.1) 1px,transparent 1px);background-size:26px 26px}
-.board:before{content:"";position:absolute;inset:0 0 auto 0;height:26px;background:radial-gradient(circle at 20px 0,#fff7f3 17px,transparent 18px) 0 0/40px 26px repeat-x;border-radius:14px 14px 0 0}
-.title{position:absolute;top:-6px;left:50%;transform:translateX(-50%);background:linear-gradient(#a56a4c,#7f4a33);border:4px solid #62362a;outline:3px solid #b98466;outline-offset:-9px;color:#fff6ea;font-weight:600;font-size:clamp(1.2rem,4vw,1.9rem);padding:8px 34px;border-radius:40px;box-shadow:0 5px 0 #4d2a1f;white-space:nowrap;margin:0;text-shadow:0 2px 0 #5b3022}
-.pic{position:absolute;font-size:2.2rem;pointer-events:none;filter:drop-shadow(0 3px 0 rgba(90,58,40,.25))}
-.pic.a{top:8px;left:10px;transform:rotate(-8deg)}.pic.b{top:8px;right:10px;transform:rotate(8deg)}
-.pic.c{bottom:6px;left:12px;font-size:2.6rem}.pic.d{bottom:6px;right:14px;font-size:2.6rem}.pic.e{bottom:4px;left:50%;font-size:1.8rem;letter-spacing:.4em;transform:translateX(-50%);opacity:.9}
-.pic.f{bottom:4px;left:22%;font-size:2rem}
-.bob{animation:bob 3.6s ease-in-out infinite}@keyframes bob{50%{transform:translateY(-5px) rotate(3deg)}}
-.layout{display:grid;grid-template-columns:minmax(0,1fr) 190px;gap:22px;align-items:start}
-.layout>section{min-width:0}
-nav{display:flex;flex-direction:column;gap:14px;padding-top:30px}
-.tab{position:relative;font:600 1.05rem 'Fredoka';color:#8a6a50;background:var(--ivory);border:2px dashed #d6c3a3;border-radius:12px 6px 12px 6px;padding:14px 46px 14px 16px;cursor:pointer;text-align:left;transition:transform .2s,background .2s;transform:rotate(-2deg);min-height:48px}
-.tab:after{content:"";position:absolute;right:12px;top:50%;width:24px;height:24px;margin-top:-12px;border-radius:50%;border:4px solid #d9b45c;background:#f7e6a8}
-.tab:hover{transform:rotate(0) translateX(-4px)}
-.tab[aria-selected="true"]{color:var(--wood2);background:#fff;border:2px solid var(--wood3);box-shadow:0 4px 0 rgba(138,79,48,.35);transform:rotate(0) translateX(-6px)}
-.tab[aria-selected="true"]:after{background:#f1b93c;border-color:#c98a1c;box-shadow:0 0 0 4px rgba(241,185,60,.35)}
-:focus-visible{outline:3px solid #3f7fb5;outline-offset:2px}
-.form{background:var(--cream);border:6px solid #fff8f4;border-radius:36px 28px 40px 30px;box-shadow:0 8px 18px rgba(90,58,40,.18);padding:22px 20px 26px;position:relative}
-.form:before{content:"";position:absolute;inset:10px;border:3px dotted #fff;border-radius:28px;pointer-events:none}
-.row{display:flex;align-items:center;gap:12px;max-width:480px;margin:10px auto;position:relative}
-.row label{font:700 1.7rem 'Gaegu';min-width:96px;text-align:right;color:var(--wood2)}
-.spin{flex:1;display:flex;border:3px solid #a98462;border-radius:14px;overflow:hidden;background:var(--ivory)}
-.spin input{flex:1;min-width:0;border:0;background:transparent;text-align:center;font:600 1.7rem 'Fredoka';color:var(--ink);padding:6px;-moz-appearance:textfield}
-.spin input::-webkit-outer-spin-button,.spin input::-webkit-inner-spin-button{-webkit-appearance:none;margin:0}
-.spin input:focus{outline:none;background:#fffdf3}
-.ud{display:flex;flex-direction:column;border-left:3px solid #a98462;width:44px}
-.ud button{flex:1;min-height:24px;border:0;background:#e9d8b4;color:var(--wood2);cursor:pointer;font-size:.8rem;transition:background .15s}
-.ud button+button{border-top:2px solid #a98462}.ud button:hover{background:var(--butter)}.ud button:active{background:var(--peach)}
-.row.bad .spin{border-color:var(--err)}
-.err{display:none;max-width:480px;margin:10px auto 0;padding:10px 14px;border-radius:12px;background:#fde6df;border:2px solid var(--err);color:#8d2d1f;font-weight:500}
-.err.on{display:block}
-.btns{display:flex;justify-content:center;gap:14px;margin-top:16px;flex-wrap:wrap}
-.go,.rs{font:600 1.35rem 'Fredoka';cursor:pointer;border-radius:20px;min-height:52px;transition:transform .15s,box-shadow .15s}
-.go{color:#fff;padding:10px 44px;background:linear-gradient(#b87445,#8b4e2d);border:3px solid #6a3a22;box-shadow:0 6px 0 #53301d;text-shadow:0 2px 0 #5b3022}
-.go:hover{transform:translateY(-2px)}.go:active{transform:translateY(4px);box-shadow:0 2px 0 #53301d}
-.rs{color:var(--wood2);padding:10px 24px;background:var(--ivory);border:3px solid #c9ae88;box-shadow:0 5px 0 #b89c76}
-.rs:hover{transform:translateY(-2px)}.rs:active{transform:translateY(3px);box-shadow:0 2px 0 #b89c76}
-.note{text-align:center;font-size:.88rem;margin:14px auto 0;max-width:480px;opacity:.85}
-.stale{display:none;margin:18px 0 0;padding:10px 14px;border-radius:12px;background:#fff4c9;border:2px dashed #d4a82c;font-weight:500}
-.stale.on{display:block}
-#res.old .card,#res.old .sum,#res.old .final{opacity:.4;filter:grayscale(.6)}
-.sum{margin-top:22px;display:flex;flex-wrap:wrap;gap:10px}
-.chip{background:var(--ivory);border:2px solid #d6c3a3;border-radius:999px;padding:6px 16px;font-weight:500}
-.chip b{color:var(--wood)}
-.card{background:#fffdf6;border:3px solid #fff;outline:2px solid #e2d0ad;border-radius:20px;padding:14px 16px;margin-top:16px;box-shadow:0 4px 10px rgba(90,58,40,.12);animation:pop .5s both}
-@keyframes pop{from{opacity:0;transform:translateY(10px) scale(.98)}}
-.card h3{margin:0 0 4px;font-size:1.1rem;color:var(--wood2)}
-.card h3 span{display:inline-block;background:var(--sage);color:#2f4a20;border-radius:999px;padding:1px 12px;margin-right:8px;font-size:.95rem}
-.card p{margin:4px 0 8px;line-height:1.5}
-.m{font:1.25rem/1.9 Cambria,'Times New Roman',serif;overflow-x:auto;padding:4px 2px;white-space:nowrap}
-.m.wrap{white-space:normal;max-height:210px;overflow-y:auto;overflow-x:auto}
-.m.wrap>span.x{display:inline}
-.fr{display:inline-flex;flex-direction:column;vertical-align:middle;text-align:center;margin:0 4px}
-.fr>span:first-child{border-bottom:2px solid var(--ink);padding:0 6px 3px}.fr>span:last-child{padding:3px 6px 0}
-.fr .fx{white-space:normal;max-width:460px}
-s{text-decoration:line-through;text-decoration-thickness:2px;text-decoration-color:var(--err);opacity:.6}
-.final{margin-top:18px;text-align:center;background:linear-gradient(#fff3bf,#fbe08a);border:4px solid #e0b640;border-radius:24px;padding:16px;animation:pop .6s both;box-shadow:0 6px 0 rgba(160,120,30,.3)}
-.final .big{display:inline-block;font:700 1.7rem Cambria,serif;border:3px solid var(--wood);border-radius:12px;padding:6px 18px;background:#fffdf0;max-width:100%;overflow-x:auto;word-break:break-all}
-.final p{margin:10px 0 0;font-weight:500}
-.ref h2{margin:6px 0;font-size:1.3rem}
-.ref .card{margin-top:14px}
-.ref ul{margin:6px 0 0;padding-left:20px;line-height:1.6}
-.card p,.final p,.lcount,.err,.note{overflow-wrap:anywhere}
-.hide{display:none!important}
-@media(max-width:760px){.board{margin:10px;padding:74px 12px 84px;border-width:8px}.layout{grid-template-columns:minmax(0,1fr)}
-nav{order:-1;flex-direction:row;gap:8px;padding-top:6px}.tab{flex:1;padding:12px 8px;text-align:center;font-size:.9rem;transform:none!important}.tab:after{display:none}
-.row{gap:8px}.row label{min-width:64px;font-size:1.3rem}.spin input{font-size:1.4rem}#items{font-size:1rem}.final .big{font-size:1.3rem}.pic{font-size:1.6rem}.pic.c,.pic.d{font-size:2rem}.pic.f{display:none}}
-@media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
-.row.bad #items{color:var(--err)}
-#items{font-size:1.15rem}
-.lst{display:flex;flex-wrap:wrap;gap:8px;margin-top:10px;max-height:420px;overflow-y:auto;padding:6px;background:var(--cream);border:2px dashed #d6c3a3;border-radius:14px}
-.it{background:var(--ivory);border:2px solid #d6c3a3;border-radius:12px;padding:3px 12px;font:500 1.05rem 'Fredoka';white-space:nowrap}
-.it small{color:var(--wood3);margin-right:6px}
-.lcount{font-weight:500;margin:6px 0 0}
-.lbtns{display:flex;gap:10px;flex-wrap:wrap;margin-top:10px}
-.lbtns button{font:600 1rem 'Fredoka';color:var(--wood2);background:var(--ivory);border:3px solid #c9ae88;border-radius:14px;padding:8px 16px;cursor:pointer;box-shadow:0 4px 0 #b89c76}
-.lbtns button:hover{background:var(--butter)}
-.lbtns button:active{transform:translateY(3px);box-shadow:0 1px 0 #b89c76}
+:root {
+  --bg: #d9c9a8;
+  --bg2: #cdb98f;
+  --paper: #ecdcc3;
+  --ivory: #fbf6e9;
+  --cream: #f7eed8;
+  --wood: #8a4f30;
+  --wood2: #6d3b22;
+  --wood3: #a8683f;
+  --ink: #5a3a28;
+  --sage: #a9c18a;
+  --sage2: #6f8f55;
+  --peach: #f4c3a1;
+  --butter: #f7e08f;
+  --err: #b8402f;
+  --active-node: #f7e08f;
+  --matched-node: #a9c18a;
+  box-sizing: border-box;
+  padding-top: env(safe-area-inset-top,0px);
+  padding-bottom: env(safe-area-inset-bottom,0px);
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #3a2e22;
+    --bg2: #2d2319;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #3a2e22;
+  --bg2: #2d2319;
+}
+* { box-sizing: border-box; }
+html { scroll-padding-top: env(safe-area-inset-top,0px); }
+body {
+  margin: 0;
+  min-height: 100vh;
+  font-family: 'Fredoka', system-ui, sans-serif;
+  color: var(--ink);
+  background:
+    radial-gradient(circle at 12% 18%, rgba(169,193,138,.55) 0 90px, transparent 91px),
+    radial-gradient(circle at 90% 78%, rgba(244,195,161,.6) 0 110px, transparent 111px),
+    radial-gradient(circle at 80% 8%, rgba(247,224,143,.45) 0 70px, transparent 71px),
+    var(--bg);
+  background-attachment: fixed;
+}
+.board {
+  position: relative;
+  max-width: 1120px;
+  margin: 22px auto;
+  padding: 78px 22px 90px;
+  background: var(--paper);
+  border: 12px solid #5d4332;
+  border-radius: 26px;
+  box-shadow: 0 14px 0 rgba(60,35,20,.25), 0 24px 40px rgba(40,25,10,.35);
+  background-image: linear-gradient(rgba(120,90,60,.1) 1px, transparent 1px), linear-gradient(90deg, rgba(120,90,60,.1) 1px, transparent 1px);
+  background-size: 26px 26px;
+}
+.board:before {
+  content: "";
+  position: absolute;
+  inset: 0 0 auto 0;
+  height: 26px;
+  background: radial-gradient(circle at 20px 0, #fff7f3 17px, transparent 18px) 0 0/40px 26px repeat-x;
+  border-radius: 14px 14px 0 0;
+}
+.title {
+  position: absolute;
+  top: -6px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: linear-gradient(#a56a4c, #7f4a33);
+  border: 4px solid #62362a;
+  outline: 3px solid #b98466;
+  outline-offset: -9px;
+  color: #fff6ea;
+  font-weight: 600;
+  font-size: clamp(1.1rem, 3.8vw, 1.8rem);
+  padding: 8px 30px;
+  border-radius: 40px;
+  box-shadow: 0 5px 0 #4d2a1f;
+  white-space: nowrap;
+  margin: 0;
+  text-shadow: 0 2px 0 #5b3022;
+}
+.pic { position: absolute; font-size: 2.2rem; pointer-events: none; filter: drop-shadow(0 3px 0 rgba(90,58,40,.25)); }
+.pic.a { top: 8px; left: 10px; transform: rotate(-8deg); }
+.pic.b { top: 8px; right: 10px; transform: rotate(8deg); }
+.pic.c { bottom: 6px; left: 12px; font-size: 2.6rem; }
+.pic.d { bottom: 6px; right: 14px; font-size: 2.6rem; }
+.pic.e { bottom: 4px; left: 50%; font-size: 1.8rem; letter-spacing: .4em; transform: translateX(-50%); opacity: .9; }
+.pic.f { bottom: 4px; left: 22%; font-size: 2rem; }
+.bob { animation: bob 3.6s ease-in-out infinite; }
+@keyframes bob { 50% { transform: translateY(-5px) rotate(3deg); } }
+
+.layout { display: grid; grid-template-columns: minmax(0,1fr) 210px; gap: 20px; align-items: start; }
+.layout > section { min-width: 0; }
+nav { display: flex; flex-direction: column; gap: 10px; padding-top: 24px; }
+.tab {
+  position: relative;
+  font: 600 0.98rem 'Fredoka';
+  color: #8a6a50;
+  background: var(--ivory);
+  border: 2px dashed #d6c3a3;
+  border-radius: 12px 6px 12px 6px;
+  padding: 12px 14px;
+  cursor: pointer;
+  text-align: left;
+  transition: transform .2s, background .2s;
+  min-height: 46px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.tab:hover { transform: translateX(-4px); }
+.tab[aria-selected="true"] {
+  color: var(--wood2);
+  background: #fff;
+  border: 2px solid var(--wood3);
+  box-shadow: 0 4px 0 rgba(138,79,48,.35);
+  transform: translateX(-6px);
+}
+
+.presets-container {
+  background: var(--ivory);
+  border: 2px solid #d6c3a3;
+  border-radius: 16px;
+  padding: 10px 14px;
+  margin-bottom: 16px;
+}
+.presets-title { font-size: 0.9rem; font-weight: 600; color: var(--wood2); margin-bottom: 6px; display: flex; align-items: center; gap: 6px; }
+.presets { display: flex; gap: 6px; flex-wrap: wrap; }
+.preset-btn {
+  font: 600 0.82rem 'Fredoka';
+  background: var(--cream);
+  border: 2px solid #c9ae88;
+  color: var(--wood2);
+  padding: 4px 10px;
+  border-radius: 10px;
+  cursor: pointer;
+  box-shadow: 0 2px 0 #b89c76;
+  transition: all .15s;
+}
+.preset-btn:hover { background: var(--butter); transform: translateY(-1px); }
+.preset-btn:active { transform: translateY(2px); box-shadow: 0 0 0 #b89c76; }
+
+.form {
+  background: var(--cream);
+  border: 6px solid #fff8f4;
+  border-radius: 32px;
+  box-shadow: 0 8px 18px rgba(90,58,40,.18);
+  padding: 20px 18px 24px;
+  position: relative;
+}
+.form:before {
+  content: "";
+  position: absolute;
+  inset: 10px;
+  border: 3px dotted #fff;
+  border-radius: 24px;
+  pointer-events: none;
+}
+.row { display: flex; align-items: center; gap: 10px; max-width: 520px; margin: 10px auto; position: relative; }
+.row label { font: 700 1.5rem 'Gaegu'; min-width: 110px; text-align: right; color: var(--wood2); }
+.spin { flex: 1; display: flex; border: 3px solid #a98462; border-radius: 14px; overflow: hidden; background: var(--ivory); }
+.spin input { flex: 1; min-width: 0; border: 0; background: transparent; text-align: center; font: 600 1.4rem 'Fredoka'; color: var(--ink); padding: 6px; }
+.spin input:focus { outline: none; background: #fffdf3; }
+.ud { display: flex; flex-direction: column; border-left: 3px solid #a98462; width: 44px; }
+.ud button { flex: 1; min-height: 22px; border: 0; background: #e9d8b4; color: var(--wood2); cursor: pointer; font-size: .8rem; }
+.ud button+button { border-top: 2px solid #a98462; }
+.ud button:hover { background: var(--butter); }
+
+.row.bad .spin { border-color: var(--err); }
+.err { display: none; max-width: 520px; margin: 10px auto 0; padding: 10px 14px; border-radius: 12px; background: #fde6df; border: 2px solid var(--err); color: #8d2d1f; font-weight: 500; }
+.err.on { display: block; }
+.btns { display: flex; justify-content: center; gap: 12px; margin-top: 16px; flex-wrap: wrap; }
+.go, .rs, .dl { font: 600 1.2rem 'Fredoka'; cursor: pointer; border-radius: 18px; min-height: 48px; transition: transform .15s, box-shadow .15s; }
+.go { color: #fff; padding: 8px 36px; background: linear-gradient(#b87445,#8b4e2d); border: 3px solid #6a3a22; box-shadow: 0 5px 0 #53301d; text-shadow: 0 2px 0 #5b3022; }
+.go:hover { transform: translateY(-2px); } .go:active { transform: translateY(3px); box-shadow: 0 1px 0 #53301d; }
+.rs { color: var(--wood2); padding: 8px 20px; background: var(--ivory); border: 3px solid #c9ae88; box-shadow: 0 4px 0 #b89c76; }
+.rs:hover { transform: translateY(-2px); } .rs:active { transform: translateY(2px); box-shadow: 0 1px 0 #b89c76; }
+.dl { color: #2f4a20; padding: 8px 20px; background: var(--sage); border: 3px solid var(--sage2); box-shadow: 0 4px 0 #55723f; }
+.dl:hover { transform: translateY(-2px); } .dl:active { transform: translateY(2px); box-shadow: 0 1px 0 #55723f; }
+
+.note { text-align: center; font-size: .85rem; margin: 12px auto 0; max-width: 500px; opacity: .88; }
+.stale { display: none; margin: 16px 0 0; padding: 10px 14px; border-radius: 12px; background: #fff4c9; border: 2px dashed #d4a82c; font-weight: 500; }
+.stale.on { display: block; }
+
+.sum { margin-top: 20px; display: flex; flex-wrap: wrap; gap: 8px; }
+.chip { background: var(--ivory); border: 2px solid #d6c3a3; border-radius: 999px; padding: 5px 14px; font-weight: 500; font-size: 0.92rem; }
+.chip b { color: var(--wood); }
+.card { background: #fffdf6; border: 3px solid #fff; outline: 2px solid #e2d0ad; border-radius: 20px; padding: 14px 16px; margin-top: 16px; box-shadow: 0 4px 10px rgba(90,58,40,.12); animation: pop .4s both; }
+@keyframes pop { from { opacity: 0; transform: translateY(8px) scale(.99); } }
+.card h3 { margin: 0 0 4px; font-size: 1.05rem; color: var(--wood2); }
+.card h3 span { display: inline-block; background: var(--sage); color: #2f4a20; border-radius: 999px; padding: 1px 10px; margin-right: 8px; font-size: .88rem; }
+.card p { margin: 4px 0 8px; line-height: 1.5; }
+.m { font: 1.2rem/1.8 Cambria,'Times New Roman',serif; overflow-x: auto; padding: 4px 2px; white-space: nowrap; }
+.m.wrap { white-space: normal; max-height: 220px; overflow-y: auto; }
+.fr { display: inline-flex; flex-direction: column; vertical-align: middle; text-align: center; margin: 0 4px; }
+.fr>span:first-child { border-bottom: 2px solid var(--ink); padding: 0 6px 2px; }
+.fr>span:last-child { padding: 2px 6px 0; }
+.fr .fx { white-space: normal; max-width: 460px; }
+s { text-decoration: line-through; text-decoration-thickness: 2px; text-decoration-color: var(--err); opacity: .6; }
+.final { margin-top: 18px; text-align: center; background: linear-gradient(#fff3bf,#fbe08a); border: 4px solid #e0b640; border-radius: 22px; padding: 16px; animation: pop .5s both; box-shadow: 0 5px 0 rgba(160,120,30,.3); }
+.final .big { display: inline-block; font: 700 1.6rem Cambria,serif; border: 3px solid var(--wood); border-radius: 12px; padding: 6px 16px; background: #fffdf0; max-width: 100%; overflow-x: auto; }
+
+.lst { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 10px; max-height: 380px; overflow-y: auto; padding: 8px; background: var(--cream); border: 2px dashed #d6c3a3; border-radius: 14px; }
+.it { background: var(--ivory); border: 2px solid #d6c3a3; border-radius: 10px; padding: 3px 10px; font: 500 0.98rem 'Fredoka'; white-space: nowrap; }
+.it small { color: var(--wood3); margin-right: 5px; }
+.lcount { font-weight: 500; margin: 6px 0 0; }
+.lbtns { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 10px; }
+.lbtns button { font: 600 0.95rem 'Fredoka'; color: var(--wood2); background: var(--ivory); border: 2.5px solid #c9ae88; border-radius: 12px; padding: 6px 14px; cursor: pointer; box-shadow: 0 3px 0 #b89c76; }
+.lbtns button:hover { background: var(--butter); }
+
+/* Visualizer Controls & Tree */
+.anim-controls { display: flex; gap: 10px; align-items: center; flex-wrap: wrap; background: var(--ivory); padding: 12px; border-radius: 16px; border: 2px solid #d6c3a3; margin-top: 10px; }
+.anim-btn { font: 600 0.95rem 'Fredoka'; color: var(--wood2); background: #fff; border: 2px solid #c9ae88; border-radius: 10px; padding: 6px 14px; cursor: pointer; box-shadow: 0 3px 0 #b89c76; }
+.anim-btn:active { transform: translateY(2px); box-shadow: 0 0 0; }
+.tree-container { width: 100%; height: 360px; overflow: auto; background: #fffdf8; border: 2px solid #d6c3a3; border-radius: 16px; position: relative; margin-top: 10px; }
+.tree-svg { width: 100%; height: 100%; min-width: 600px; min-height: 340px; }
+
+.hide { display: none !important; }
+
+@media(max-width: 820px) {
+  .board { margin: 10px; padding: 74px 12px 84px; border-width: 8px; }
+  .layout { grid-template-columns: minmax(0,1fr); }
+  nav { order: -1; flex-direction: row; flex-wrap: wrap; gap: 6px; padding-top: 0; }
+  .tab { flex: 1 1 calc(33% - 6px); min-width: 100px; padding: 8px; text-align: center; font-size: .85rem; justify-content: center; }
+  .row { gap: 6px; } .row label { min-width: 80px; font-size: 1.2rem; } .spin input { font-size: 1.2rem; }
+  .pic.f { display: none; }
+}
 </style>
 </head>
 <body>
 <main class="board">
 <h1 class="title" id="ttl">Permutasi</h1>
 <span class="pic a bob">🐱</span><span class="pic b bob">🐹</span><span class="pic c bob">🦊</span><span class="pic d bob">🐻‍❄️</span><span class="pic f">🌼</span><span class="pic e">🌿🌸🌿</span>
+
 <div class="layout">
 <section>
  <div id="calc">
-  <div class="form">
-   <div class="row" id="rn"><label for="n">Input n :</label><div class="spin"><input id="n" type="number" inputmode="numeric" step="1" value="5"><div class="ud"><button type="button" data-t="n" data-d="1" aria-label="Naikkan n">▲</button><button type="button" data-t="n" data-d="-1" aria-label="Turunkan n">▼</button></div></div></div>
-   <div class="row" id="rr"><label for="r">Input r :</label><div class="spin"><input id="r" type="number" inputmode="numeric" step="1" value="3"><div class="ud"><button type="button" data-t="r" data-d="1" aria-label="Naikkan r">▲</button><button type="button" data-t="r" data-d="-1" aria-label="Turunkan r">▼</button></div></div></div>
-   <div class="row" id="ri"><label for="items">Item :</label><div class="spin"><input id="items" type="text" autocomplete="off" placeholder="A, B, C (opsional)"></div></div>
-   <div class="err" id="err" role="alert"></div>
-   <div class="btns"><button class="go" id="go" type="button">🐾 Hitung! 🐾</button><button class="rs" id="reset" type="button">Reset</button></div>
-   <p class="note">n = jumlah seluruh objek, r = jumlah objek yang dipilih. Aplikasi ini menghitung permutasi dan kombinasi standar tanpa pengulangan elemen (0 ≤ r ≤ n ≤ 100). Kolom Item boleh diisi nama sendiri dipisah koma (mis. Ani, Budi, Cici); jika diisi, nilai n mengikuti jumlah item.</p>
+  
+  <!-- Presets Bar -->
+  <div class="presets-container">
+    <div class="presets-title">⚡ Contoh Cepat Live Demo:</div>
+    <div class="presets">
+      <button type="button" class="preset-btn" onclick="applyPreset('perm', 3, 2, 'A, B, C')">P(3,2) [A,B,C]</button>
+      <button type="button" class="preset-btn" onclick="applyPreset('comb', 5, 3, 'Ani, Budi, Cici, Dedi, Eka')">C(5,3) Nama</button>
+      <button type="button" class="preset-btn" onclick="applyPreset('repeats', 6, 0, 'B, A, N, A, N, A')">Unsur Sama (BANANA)</button>
+      <button type="button" class="preset-btn" onclick="applyPreset('rep_circ', 4, 3, 'A, B, C, D')">Pengulangan &amp; Siklis</button>
+      <button type="button" class="preset-btn" onclick="applyPreset('relation', 4, 2, 'A, B, C, D')">Hubungan P vs C</button>
+      <button type="button" class="preset-btn" onclick="applyPreset('anim', 3, 2, 'A, B, C')">Animasi Visual</button>
+    </div>
   </div>
-  <div class="stale" id="stale">Nilai n atau r sudah berubah. Tekan “Hitung!” untuk memperbarui hasil di bawah.</div>
+
+  <div class="form">
+   <div class="row" id="rn"><label for="n">Input n :</label><div class="spin"><input id="n" type="number" inputmode="numeric" step="1" value="3"><div class="ud"><button type="button" data-t="n" data-d="1">▲</button><button type="button" data-t="n" data-d="-1">▼</button></div></div></div>
+   <div class="row" id="rr"><label for="r">Input r :</label><div class="spin"><input id="r" type="number" inputmode="numeric" step="1" value="2"><div class="ud"><button type="button" data-t="r" data-d="1">▲</button><button type="button" data-t="r" data-d="-1">▼</button></div></div></div>
+   <div class="row" id="ri"><label for="items">Item :</label><div class="spin"><input id="items" type="text" autocomplete="off" value="A, B, C" placeholder="A, B, C (pisahkan koma)"></div></div>
+   <div class="err" id="err" role="alert"></div>
+   <div class="btns">
+     <button class="go" id="go" type="button">🐾 Hitung! 🐾</button>
+     <button class="rs" id="reset" type="button">Reset</button>
+     <button class="dl" id="export" type="button" title="Download daftar hasil sebagai file .txt">💾 Unduh .txt</button>
+   </div>
+   <p class="note" id="mode-note">n = jumlah seluruh objek, r = jumlah objek yang dipilih.</p>
+  </div>
+
+  <div class="stale" id="stale">Nilai input telah berubah. Tekan “Hitung!” untuk memperbarui hasil.</div>
   <div id="res"></div>
  </div>
  <div id="ref" class="ref hide"></div>
 </section>
-<nav role="tablist" aria-label="Menu">
+
+<!-- Tabs Navigation -->
+<nav role="tablist" aria-label="Menu Moda">
  <button class="tab" role="tab" data-m="perm" aria-selected="true">Permutasi</button>
  <button class="tab" role="tab" data-m="comb" aria-selected="false">Kombinasi</button>
+ <button class="tab" role="tab" data-m="repeats" aria-selected="false">Unsur Sama</button>
+ <button class="tab" role="tab" data-m="rep_circ" aria-selected="false">Berulang &amp; Siklis</button>
+ <button class="tab" role="tab" data-m="relation" aria-selected="false">Hubungan P &amp; C</button>
+ <button class="tab" role="tab" data-m="anim" aria-selected="false">Animasi Visual</button>
  <button class="tab" role="tab" data-m="ref" aria-selected="false">Rumus</button>
 </nav>
 </div>
 </main>
+
 <script>
-/* ===== Logika matematika (BigInt, terpisah dari tampilan) ===== */
-const fmt=v=>BigInt(v).toLocaleString('id-ID');
-function factorial(n){let f=1n;for(let i=2n;i<=BigInt(n);i++)f*=i;return f}
-function calculatePermutation(n,r){return factorial(n)/factorial(n-r)}
-function calculateCombination(n,r){return factorial(n)/(factorial(r)*factorial(n-r))}
-const X=' × ';
-const range=(hi,lo)=>{const a=[];for(let i=hi;i>=lo;i--)a.push(i);return a};
-const list=a=>a.length?a.join(X):'1';
-const expand=k=>k<2?'1':list(range(k,1));
-const frac=(a,b)=>`<span class="fr"><span>${a}</span><span>${b}</span></span>`;
-const bigFrac=(a,b)=>`<span class="fr"><span class="fx">${a}</span><span class="fx">${b}</span></span>`;
-const prod=a=>a.reduce((p,x)=>p*BigInt(x),1n);
-function mulSteps(a){ // daftar perkalian bertahap
- if(a.length===0)return {lines:['Tidak ada faktor, sehingga perkalian kosong bernilai 1'],value:1n};
- if(a.length===1)return {lines:[`Hanya ada satu faktor: ${a[0]}`],value:BigInt(a[0])};
- let acc=BigInt(a[0]);const lines=[];
- for(let i=1;i<a.length;i++){const nx=acc*BigInt(a[i]);lines.push(`${fmt(acc)} × ${a[i]} = ${fmt(nx)}`);acc=nx}
- return {lines,value:acc};
-}
-const defNote=k=>k<2?` Menurut definisi ${k}! = 1.`:'';
-function cancelView(n,m){ // pembilang dengan faktor m!..1 dicoret
- const keep=range(n,m+1);const parts=keep.slice();
- if(m>=1)parts.push(`<s>${list(range(m,1))}</s>`);
- return parts.length?parts.join(X):'1';
-}
-function generatePermutationSteps(n,r){
- const m=n-r,res=calculatePermutation(n,r),keep=range(n,m+1);
- const ms=mulSteps(keep);
- const P=`P(${n},${r})`;
- const steps=[];
- steps.push({t:'Rumus umum',d:'n adalah jumlah seluruh objek, r adalah jumlah objek yang dipilih, dan tanda faktorial (!) berarti perkalian bilangan bulat berurutan dari bilangan itu turun sampai 1.',
-  m:[`P(n,r) = ${frac('n!','(n − r)!')}`]});
- steps.push({t:'Substitusi nilai input',d:`Ganti n dengan ${n} dan r dengan ${r}, lalu hitung bagian dalam kurung: ${n} − ${r} = ${m}.`,
-  m:[`${P} = ${frac(n+'!',`(${n} − ${r})!`)}`,`${P} = ${frac(n+'!',m+'!')}`]});
- const e=`${n}! = ${n===0?'1':expand(n)}`;
- steps.push({t:'Uraikan faktorial',d:`Tulis setiap faktorial sebagai perkalian lengkap.${defNote(n)}${m!==n?defNote(m):''}`,
-  m:[e,`${m}! = ${m===0?'1':expand(m)}`,`${P} = ${bigFrac(expand(n),expand(m))}`],wrap:true});
- steps.push({t:'Sederhanakan pecahan',
-  d:m>=1?`Penyebut ${m}! = ${expand(m)} juga muncul sebagai faktor terakhir pada pembilang (${n}! = ${keep.length?list(keep)+X:''}${m}!). Faktor yang sama di pembilang dan penyebut dibagi sehingga hasilnya 1, jadi dapat dicoret.`:`Penyebut ${m}! = 1, sehingga tidak ada faktor yang dapat dicoret dan pembilang tetap utuh.`,
-  m:[`${P} = ${bigFrac(cancelView(n,m),m>=1?`<s>${expand(m)}</s>`:'1')}`,`${P} = ${keep.length?list(keep):'1'}${keep.length?'':' (tidak ada faktor tersisa)'}`],wrap:true});
- steps.push({t:'Lakukan perkalian',d:`Kalikan ${r} faktor yang tersisa dari kiri ke kanan.`,m:ms.lines,wrap:true});
- steps.push({t:'Hasil akhir',d:`Terdapat ${fmt(res)} susunan berbeda jika ${r} elemen dipilih dari ${n} elemen yang tersedia dan urutannya diperhitungkan.`,m:[]});
- return {steps,res,label:P};
-}
-function generateCombinationSteps(n,r){
- const m=n-r,res=calculateCombination(n,r),keep=range(n,m+1);
- const num=mulSteps(keep);
- const denList=r<2?[]:range(r,1);
- const denS=mulSteps(denList);
- const C=`C(${n},${r})`;
- const steps=[];
- steps.push({t:'Rumus umum',d:'n adalah jumlah seluruh objek, r adalah jumlah objek yang dipilih, dan faktorial (!) adalah perkalian bilangan bulat berurutan sampai 1. Pada kombinasi, urutan tidak diperhitungkan.',
-  m:[`C(n,r) = ${frac('n!','r! (n − r)!')}`]});
- steps.push({t:'Substitusi nilai input',d:`Ganti n dengan ${n} dan r dengan ${r}, lalu hitung bagian dalam kurung: ${n} − ${r} = ${m}.`,
-  m:[`${C} = ${frac(n+'!',`${r}! (${n} − ${r})!`)}`,`${C} = ${frac(n+'!',`${r}! × ${m}!`)}`]});
- steps.push({t:'Uraikan seluruh faktorial',d:`Tulis setiap faktorial sebagai perkalian lengkap.${[...new Set([n,r,m])].map(defNote).join('')}`,
-  m:[`${n}! = ${n===0?'1':expand(n)}`,`${r}! = ${r===0?'1':expand(r)}`,`${m}! = ${m===0?'1':expand(m)}`,`${C} = ${bigFrac(expand(n),`(${expand(r)}) × (${expand(m)})`)}`],wrap:true});
- steps.push({t:'Sederhanakan faktorial',
-  d:m>=1?`Faktorial (n − r)! = ${m}! pada penyebut sama dengan faktor terakhir pada pembilang (${n}! = ${keep.length?list(keep)+X:''}${m}!). Faktor yang sama dicoret. Tersisa ${keep.length} faktor di pembilang dan ${r}! di penyebut.`:`Karena (n − r)! = 0! = 1, tidak ada faktor yang dapat dicoret. Pembilang tetap n! dan penyebut tetap ${r}!.`,
-  m:[`${C} = ${bigFrac(cancelView(n,m),`(${expand(r)}) × ${m>=1?`<s>${expand(m)}</s>`:'1'}`)}`,`${C} = ${bigFrac(keep.length?list(keep):'1',expand(r))}`],wrap:true});
- steps.push({t:'Hitung pembilang dan penyebut',d:'Hitung pembilang dan penyebut secara terpisah.',
-  m:['Pembilang:',...num.lines,`${keep.length?list(keep):'1'} = ${fmt(num.value)}`,'Penyebut:',...denS.lines,`${expand(r)} = ${fmt(denS.value)}`],wrap:true});
- steps.push({t:'Lakukan pembagian',d:`Bagi hasil pembilang dengan hasil penyebut. ${fmt(num.value)} habis dibagi ${fmt(denS.value)}.`,
-  m:[`${C} = ${frac(fmt(num.value),fmt(denS.value))}`,`${C} = ${fmt(res)}`]});
- steps.push({t:'Hasil akhir',d:`Terdapat ${fmt(res)} cara berbeda untuk memilih ${r} elemen dari ${n} elemen jika urutan pemilihannya tidak diperhitungkan.`,m:[]});
- return {steps,res,label:C};
-}
-/* ===== Pembangkit seluruh susunan (generator, tidak menyimpan semua hasil di memori) ===== */
-// Permutasi: urutan diperhitungkan. Pilih item yang belum dipakai di setiap posisi (backtracking).
-function* generatePermutations(items,r){
- const n=items.length,used=new Array(n).fill(false),cur=[];
- function* pick(){
-  if(cur.length===r){yield cur.slice();return}
-  for(let i=0;i<n;i++){
-   if(used[i])continue;
-   used[i]=true;cur.push(items[i]);
-   yield* pick();
-   cur.pop();used[i]=false;
+/* ===== Mathematics Core (BigInt Support) ===== */
+const fmt = v => BigInt(v).toLocaleString('id-ID');
+function factorial(n) { let f = 1n; for (let i = 2n; i <= BigInt(n); i++) f *= i; return f; }
+function calculatePermutation(n, r) { return factorial(n) / factorial(n - r); }
+function calculateCombination(n, r) { return factorial(n) / (factorial(r) * factorial(n - r)); }
+
+const X = ' × ';
+const range = (hi, lo) => { const a = []; for (let i = hi; i >= lo; i--) a.push(i); return a; };
+const list = a => a.length ? a.join(X) : '1';
+const expand = k => k < 2 ? '1' : list(range(k, 1));
+const frac = (a, b) => `<span class="fr"><span>${a}</span><span>${b}</span></span>`;
+const bigFrac = (a, b) => `<span class="fr"><span class="fx">${a}</span><span class="fx">${b}</span></span>`;
+
+function mulSteps(a) {
+  if (a.length === 0) return { lines: ['Tidak ada faktor = 1'], value: 1n };
+  if (a.length === 1) return { lines: [`Faktor tunggal: ${a[0]}`], value: BigInt(a[0]) };
+  let acc = BigInt(a[0]); const lines = [];
+  for (let i = 1; i < a.length; i++) {
+    const nx = acc * BigInt(a[i]);
+    lines.push(`${fmt(acc)} × ${a[i]} = ${fmt(nx)}`);
+    acc = nx;
   }
- }
- yield* pick();
+  return { lines, value: acc };
 }
-// Kombinasi: urutan tidak diperhitungkan. Indeks selalu naik sehingga {A,B} dan {B,A} tidak muncul dua kali.
-function* generateCombinations(items,r){
- const n=items.length,cur=[];
- function* pick(start){
-  if(cur.length===r){yield cur.slice();return}
-  for(let i=start;i<=n-(r-cur.length);i++){
-   cur.push(items[i]);
-   yield* pick(i+1);
-   cur.pop();
+
+function cancelView(n, m) {
+  const keep = range(n, m + 1); const parts = keep.slice();
+  if (m >= 1) parts.push(`<s>${list(range(m, 1))}</s>`);
+  return parts.length ? parts.join(X) : '1';
+}
+
+/* Feature 4: Permutation with repeated items (Multiset Permutation) */
+function calculateMultisetPermutation(items) {
+  const counts = {};
+  items.forEach(x => counts[x] = (counts[x] || 0) + 1);
+  const n = items.length;
+  let num = factorial(n);
+  let den = 1n;
+  Object.values(counts).forEach(c => { den *= factorial(c); });
+  return { n, counts, total: num / den, num, den };
+}
+
+/* Generators */
+function* generatePermutations(items, r) {
+  const n = items.length, used = new Array(n).fill(false), cur = [];
+  function* pick() {
+    if (cur.length === r) { yield cur.slice(); return; }
+    for (let i = 0; i < n; i++) {
+      if (used[i]) continue;
+      used[i] = true; cur.push(items[i]);
+      yield* pick();
+      cur.pop(); used[i] = false;
+    }
   }
- }
- yield* pick(0);
+  yield* pick();
 }
-const esc=t=>String(t).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
-function autoItems(n){ // A, B, C, ... (maks 26), selebihnya 1, 2, 3, ...
- return Array.from({length:n},(_,i)=>n<=26?String.fromCharCode(65+i):String(i+1));
+
+function* generateCombinations(items, r) {
+  const n = items.length, cur = [];
+  function* pick(start) {
+    if (cur.length === r) { yield cur.slice(); return; }
+    for (let i = start; i <= n - (r - cur.length); i++) {
+      cur.push(items[i]);
+      yield* pick(i + 1);
+      cur.pop();
+    }
+  }
+  yield* pick(0);
 }
-/* ===== Tampilan ===== */
-const $=id=>document.getElementById(id);
-let mode='perm',computed=null;
-function readInputs(){
- let sn=$('n').value.trim();const sr=$('r').value.trim(),errs=[];let bn=false,br=false,bi=false;
- const raw=$('items').value.trim();let items=null;
- if(raw!==''){
-  const arr=raw.split(',').map(x=>x.trim()).filter(x=>x!=='');
-  const dup=arr.filter((x,i)=>arr.indexOf(x)!==i);
-  if(arr.length===0){errs.push('Kolom Item tidak berisi nama yang valid. Pisahkan dengan koma, mis. A, B, C.');bi=true}
-  else if(dup.length){errs.push(`Item tidak boleh sama: "${[...new Set(dup)].join('", "')}" muncul lebih dari sekali. Program ini untuk objek tanpa pengulangan.`);bi=true}
-  else if(arr.length>100){errs.push('Jumlah item maksimal 100.');bi=true}
-  else{items=arr;sn=String(arr.length);$('n').value=sn}
- }
- const chk=(s,name)=>{
-  if(s==='')return `Input ${name} masih kosong. Isi dengan bilangan bulat.`;
-  if(!/^-?\d+$/.test(s))return `Input ${name} harus bilangan bulat tanpa koma atau desimal.`;
-  if(s.startsWith('-'))return `Input ${name} tidak boleh negatif. Gunakan bilangan bulat 0 atau lebih.`;
-  return null};
- let e1=chk(sn,'n'),e2=chk(sr,'r');
- if(e1){errs.push(e1);bn=true}if(e2){errs.push(e2);br=true}
- if(!e1&&+sn>100){errs.push('Nilai n maksimal 100 agar proses perhitungan tetap mudah dibaca.');bn=true}
- if(!e1&&!e2&&+sr>+sn){errs.push(`Nilai r (${sr}) tidak boleh lebih besar dari n (${sn}). Kecilkan r atau besarkan n.`);br=true}
- $('rn').classList.toggle('bad',bn);$('rr').classList.toggle('bad',br);$('ri').classList.toggle('bad',bi);
- const box=$('err');box.innerHTML=errs.join('<br>');box.classList.toggle('on',errs.length>0);
- if(errs.length)return null;
- return {n:+sn,r:+sr,items:items||autoItems(+sn),raw};
+
+function* generateUniquePermutations(items) {
+  const arr = items.slice().sort();
+  const n = arr.length;
+  const used = new Array(n).fill(false);
+  const cur = [];
+  function* backtrack() {
+    if (cur.length === n) { yield cur.slice(); return; }
+    for (let i = 0; i < n; i++) {
+      if (used[i]) continue;
+      if (i > 0 && arr[i] === arr[i - 1] && !used[i - 1]) continue;
+      used[i] = true; cur.push(arr[i]);
+      yield* backtrack();
+      cur.pop(); used[i] = false;
+    }
+  }
+  yield* backtrack();
 }
-function render(v){
- const {n,r,items,raw}=v;
- const g=mode==='perm'?generatePermutationSteps(n,r):generateCombinationSteps(n,r);
- const nm=mode==='perm'?'Permutasi':'Kombinasi';
- const form=mode==='perm'?`P(n,r) = n! / (n − r)!`:`C(n,r) = n! / (r! (n − r)!)`;
- let h=`<div class="sum"><span class="chip">n = <b>${n}</b></span><span class="chip">r = <b>${r}</b></span><span class="chip">Jenis: <b>${nm}</b></span><span class="chip">${form}</span></div>`;
- h+=`<h2 style="margin:20px 0 0;font-size:1.3rem">Proses Penghitungan ${nm}</h2>`;
- g.steps.forEach((s,i)=>{
-  h+=`<div class="card" style="animation-delay:${Math.min(i*90,700)}ms"><h3><span>Langkah ${i+1}</span>${s.t}</h3><p>${s.d}</p>`;
-  s.m.forEach(l=>h+=`<div class="m${s.wrap?' wrap':''}">${l}</div>`);
-  h+='</div>';
- });
- h+=`<div class="final"><div class="big">${g.label} = ${fmt(g.res)}</div><p>${nm==='Permutasi'?`Ada ${fmt(g.res)} susunan berbeda (urutan diperhitungkan).`:`Ada ${fmt(g.res)} pilihan berbeda (urutan tidak diperhitungkan).`}</p></div>`;
- h+=`<div class="card"><h3><span>Daftar</span>Seluruh ${mode==='perm'?'susunan (permutasi)':'kombinasi'}</h3><p>Item: <b>${items.map(esc).join(', ')}</b>. ${mode==='perm'?'Urutan diperhitungkan, jadi AB dan BA dihitung berbeda.':'Urutan tidak diperhitungkan, jadi AB dan BA dianggap sama.'}</p><div class="lcount" id="lcount"></div><div class="lst" id="lst"></div><div class="lbtns" id="lbtns"><button type="button" id="more">Tampilkan 500 lagi</button><button type="button" id="all">Tampilkan semua</button></div></div>`;
- $('res').className='';$('res').innerHTML=h;
- startList(items,r,g.res);
- computed={n,r,raw};$('stale').classList.remove('on');
+
+function* generateCombRepetition(items, r) {
+  const n = items.length;
+  const cur = [];
+  function* pick(start) {
+    if (cur.length === r) { yield cur.slice(); return; }
+    for (let i = start; i < n; i++) {
+      cur.push(items[i]);
+      yield* pick(i);
+      cur.pop();
+    }
+  }
+  yield* pick(0);
 }
-const LIST_CAP=100000; // batas tampilan agar browser tidak hang (jumlah total tetap dihitung dengan rumus)
-let L=null;
-function startList(items,r,total){
- const gen=mode==='perm'?generatePermutations(items,r):generateCombinations(items,r);
- const limit=total>BigInt(LIST_CAP)?LIST_CAP:Number(total);
- L={gen,shown:0,limit,total,items,token:{}};
- showMore(300);
- $('more').onclick=()=>showMore(500);
- $('all').onclick=()=>showAll();
+
+const esc = t => String(t).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+function autoItems(n) { return Array.from({ length: n }, (_, i) => n <= 26 ? String.fromCharCode(65 + i) : String(i + 1)); }
+
+/* ===== App UI State ===== */
+const $ = id => document.getElementById(id);
+let mode = 'perm';
+let computed = null;
+let currentList = [];
+
+function applyPreset(m, nVal, rVal, itemsStr) {
+  setMode(m);
+  $('n').value = nVal;
+  $('r').value = rVal;
+  $('items').value = itemsStr;
+  checkStale();
+  calc();
 }
-function showMore(k){
- if(!L)return;
- const lst=$('lst');let html='';
- const stop=Math.min(L.shown+k,L.limit);
- while(L.shown<stop){
-  const nx=L.gen.next();if(nx.done)break;
-  L.shown++;
-  const a=nx.value;
-  html+=`<span class="it"><small>${L.shown}.</small>${a.length?a.map(esc).join(' '):'∅ (kosong)'}</span>`;
- }
- lst.insertAdjacentHTML('beforeend',html);
- updateListInfo();
+
+function readInputs() {
+  let sn = $('n').value.trim();
+  const sr = $('r').value.trim();
+  const errs = [];
+  let bn = false, br = false, bi = false;
+  const raw = $('items').value.trim();
+  let items = null;
+
+  if (raw !== '') {
+    const arr = raw.split(',').map(x => x.trim()).filter(x => x !== '');
+    if (arr.length === 0) {
+      errs.push('Kolom Item tidak valid.'); bi = true;
+    } else if (mode !== 'repeats' && mode !== 'rep_circ') {
+      const dup = arr.filter((x, i) => arr.indexOf(x) !== i);
+      if (dup.length) {
+        errs.push(`Item tidak boleh sama pada mode ini: "${[...new Set(dup)].join('", "')}". Gunakan tab "Unsur Sama" untuk item berulang.`);
+        bi = true;
+      }
+    }
+    if (!bi) {
+      items = arr;
+      sn = String(arr.length);
+      $('n').value = sn;
+    }
+  }
+
+  const chk = (s, name) => {
+    if (s === '') return `Input ${name} masih kosong.`;
+    if (!/^-?\d+$/.test(s)) return `Input ${name} harus berupa bilangan bulat.`;
+    if (s.startsWith('-')) return `Input ${name} tidak boleh negatif.`;
+    return null;
+  };
+
+  let e1 = chk(sn, 'n'), e2 = chk(sr, 'r');
+  if (e1) { errs.push(e1); bn = true; }
+  if (mode !== 'repeats' && mode !== 'ref' && e2) { errs.push(e2); br = true; }
+
+  if (!e1 && +sn > 100) { errs.push('Maksimal n = 100.'); bn = true; }
+  if (mode !== 'repeats' && mode !== 'rep_circ' && !e1 && !e2 && +sr > +sn) {
+    errs.push(`Nilai r (${sr}) tidak boleh lebih besar dari n (${sn}).`); br = true;
+  }
+
+  $('rn').classList.toggle('bad', bn);
+  $('rr').classList.toggle('bad', br);
+  $('ri').classList.toggle('bad', bi);
+  const box = $('err');
+  box.innerHTML = errs.join('<br>');
+  box.classList.toggle('on', errs.length > 0);
+
+  if (errs.length) return null;
+  return { n: +sn, r: +sr, items: items || autoItems(+sn), raw };
 }
-function updateListInfo(){
- const done=L.shown>=L.limit;
- let t=`Menampilkan ${fmt(L.shown)} dari ${fmt(L.total)} kemungkinan.`;
- if(done&&L.total>BigInt(L.limit))t+=` Daftar dibatasi ${fmt(L.limit)} pertama agar browser tetap lancar; jumlah totalnya tetap benar sesuai rumus.`;
- $('lcount').textContent=t;
- $('lbtns').classList.toggle('hide',done);
+
+function calc() {
+  const v = readInputs();
+  if (!v) return;
+  render(v);
 }
-function showAll(){ // bertahap supaya halaman tidak membeku
- const tk=L.token;
- (function step(){
-  if(!L||L.token!==tk)return;
-  showMore(2000);
-  if(L.shown<L.limit)setTimeout(step,0);
- })();
+
+function render(v) {
+  const { n, r, items, raw } = v;
+  $('res').className = '';
+  
+  if (mode === 'perm') renderPermutation(n, r, items);
+  else if (mode === 'comb') renderCombination(n, r, items);
+  else if (mode === 'repeats') renderMultiset(items);
+  else if (mode === 'rep_circ') renderRepAndCirc(n, r, items);
+  else if (mode === 'relation') renderRelation(n, r, items);
+  else if (mode === 'anim') renderAnimation(n, r, items);
+
+  computed = { n, r, raw, mode };
+  $('stale').classList.remove('on');
 }
-function calc(){const v=readInputs();if(!v)return;render(v)}
-function checkStale(){
- if(!computed)return;
- const sn=$('n').value.trim(),sr=$('r').value.trim();
- const same=+sn===computed.n&&+sr===computed.r&&sn!==''&&sr!==''&&$('items').value.trim()===computed.raw;
- $('stale').classList.toggle('on',!same);$('res').classList.toggle('old',!same);
+
+/* Render Permutasi Standar */
+function renderPermutation(n, r, items) {
+  const res = calculatePermutation(n, r);
+  const m = n - r;
+  const keep = range(n, m + 1);
+  const P = `P(${n},${r})`;
+  
+  let h = `<div class="sum"><span class="chip">n = <b>${n}</b></span><span class="chip">r = <b>${r}</b></span><span class="chip">Moda: <b>Permutasi Standar</b></span></div>`;
+  h += `<div class="card"><h3><span>Langkah 1</span>Rumus &amp; Substitusi</h3><div class="m">P(${n},${r}) = ${frac(n + '!', `(${n} − ${r})!`)} = ${frac(n + '!', m + '!')}</div></div>`;
+  h += `<div class="card"><h3><span>Langkah 2</span>Penyederhanaan Faktorial</h3><div class="m">P(${n},${r}) = ${bigFrac(cancelView(n, m), m >= 1 ? `<s>${expand(m)}</s>` : '1')} = ${keep.length ? list(keep) : '1'}</div></div>`;
+  h += `<div class="final"><div class="big">${P} = ${fmt(res)}</div><p>Ada ${fmt(res)} susunan unik (urutan diperhitungkan).</p></div>`;
+  
+  h += renderListSection('Daftar Permutasi', items, `Setiap susunan membedakan urutan posisi.`);
+  $('res').innerHTML = h;
+  startList(() => generatePermutations(items, r), res);
 }
-function setMode(m){
- document.querySelectorAll('.tab').forEach(t=>t.setAttribute('aria-selected',t.dataset.m===m));
- if(m==='ref'){$('calc').classList.add('hide');$('ref').classList.remove('hide');$('ttl').textContent='Rumus';return}
- mode=m;$('ttl').textContent=m==='perm'?'Permutasi':'Kombinasi';
- $('ref').classList.add('hide');$('calc').classList.remove('hide');
- const v=readInputs();
- if(v&&computed&&v.n===computed.n&&v.r===computed.r&&v.raw===computed.raw)render(v);
- else{$('res').innerHTML='';computed=null;$('stale').classList.remove('on')}
+
+/* Render Kombinasi Standar */
+function renderCombination(n, r, items) {
+  const res = calculateCombination(n, r);
+  const m = n - r;
+  const keep = range(n, m + 1);
+  const C = `C(${n},${r})`;
+  
+  let h = `<div class="sum"><span class="chip">n = <b>${n}</b></span><span class="chip">r = <b>${r}</b></span><span class="chip">Moda: <b>Kombinasi Standar</b></span></div>`;
+  h += `<div class="card"><h3><span>Langkah 1</span>Rumus &amp; Substitusi</h3><div class="m">C(${n},${r}) = ${frac(n + '!', `${r}! (${n} − ${r})!`)} = ${frac(n + '!', `${r}! × ${m}!`)}</div></div>`;
+  h += `<div class="card"><h3><span>Langkah 2</span>Pencoretan Faktor Sama</h3><div class="m">C(${n},${r}) = ${bigFrac(cancelView(n, m), `(${expand(r)}) × ${m >= 1 ? `<s>${expand(m)}</s>` : '1'}`)} = ${bigFrac(keep.length ? list(keep) : '1', expand(r))}</div></div>`;
+  h += `<div class="final"><div class="big">${C} = ${fmt(res)}</div><p>Ada ${fmt(res)} kombinasi pilihan (urutan tidak diperhitungkan).</p></div>`;
+  
+  h += renderListSection('Daftar Kombinasi', items, `Urutan tidak diperhitungkan (misal {A,B} sama dengan {B,A}).`);
+  $('res').innerHTML = h;
+  startList(() => generateCombinations(items, r), res);
 }
-function reset(){$('n').value=5;$('r').value=3;$('items').value='';$('ri').classList.remove('bad');$('err').classList.remove('on');$('rn').classList.remove('bad');$('rr').classList.remove('bad');calc()}
-function buildRef(){
- $('ref').innerHTML=`<div class="form"><h2>Rumus Permutasi</h2><div class="m">P(n,r) = ${frac('n!','(n − r)!')}</div><ul><li>Urutan elemen diperhitungkan.</li><li>Setiap susunan dengan urutan berbeda dianggap berbeda.</li></ul></div>
- <div class="card"><h3>Rumus Kombinasi</h3><div class="m">C(n,r) = ${frac('n!','r! (n − r)!')}</div><ul><li>Urutan elemen tidak diperhitungkan.</li><li>Pemilihan elemen yang sama dianggap kombinasi yang sama meskipun urutannya berbeda.</li></ul></div>
- <div class="card"><h3>Pengertian Faktorial</h3><div class="m">n! = n × (n − 1) × … × 2 × 1</div><p>Faktorial bilangan bulat positif adalah perkalian berurutan bilangan itu sampai 1. Untuk 0, nilainya ditetapkan berdasarkan definisi matematis:</p><div class="m">0! = 1</div><p>Contoh:</p><div class="m">4! = 4 × 3 × 2 × 1 = 24</div></div>`;
+
+/* Feature 4: Unsur Sama (BANANA) */
+function renderMultiset(items) {
+  const info = calculateMultisetPermutation(items);
+  const { n, counts, total } = info;
+  
+  let countExpr = Object.entries(counts).map(([char, cnt]) => `${cnt}! (${char})`).join(' × ');
+  let denNums = Object.values(counts).map(c => `${c}!`).join(' × ');
+  
+  let h = `<div class="sum"><span class="chip">n = <b>${n}</b></span><span class="chip">Moda: <b>Permutasi Unsur Sama</b></span></div>`;
+  h += `<div class="card"><h3><span>Rumus</span>Permutasi dengan Elemen Berulang</h3>`;
+  h += `<p>Jika terdapat unsur-unsur yang sama, susunan identik akibat penukaran unsur sama dibuang:</p>`;
+  h += `<div class="m">P = ${frac('n!', 'n₁! × n₂! × ... × nₖ!')}</div>`;
+  h += `<p>Jumlah Frekuensi Elemen: ${Object.entries(counts).map(([k,v])=>`<b>${esc(k)}</b>: ${v}`).join(', ')}</p>`;
+  h += `<div class="m">P = ${frac(`${n}!`, denNums)} = ${frac(fmt(factorial(n)), fmt(info.den))} = <b>${fmt(total)}</b></div>`;
+  h += `</div>`;
+  h += `<div class="final"><div class="big">Total Susunan Unik = ${fmt(total)}</div></div>`;
+  
+  h += renderListSection('Daftar Susunan Unik', items, `Semua susunan kata unik yang dapat dibentuk.`);
+  $('res').innerHTML = h;
+  startList(() => generateUniquePermutations(items), total);
 }
-document.querySelectorAll('.tab').forEach(t=>t.onclick=()=>setMode(t.dataset.m));
-document.querySelectorAll('.ud button').forEach(b=>b.onclick=()=>{
- const el=$(b.dataset.t);let v=parseInt(el.value,10);if(isNaN(v))v=0;
- el.value=Math.max(0,Math.min(100,v+ +b.dataset.d));checkStale();
+
+/* Feature 5: Kombinasi Berulang & Permutasi Siklis */
+function renderRepAndCirc(n, r, items) {
+  const cRep = calculateCombination(n + r - 1, r);
+  const pCirc = n > 0 ? factorial(n - 1) : 0n;
+  
+  let h = `<div class="sum"><span class="chip">n = <b>${n}</b></span><span class="chip">r = <b>${r}</b></span><span class="chip">Moda: <b>Berulang &amp; Siklis</b></span></div>`;
+  
+  // Kombinasi dengan pengulangan
+  h += `<div class="card"><h3><span>Kombinasi Pengulangan</span>C(n + r − 1, r)</h3>`;
+  h += `<p>Memilih r objek dari n jenis di mana objek boleh dipilih lebih dari sekali (Stars and Bars):</p>`;
+  h += `<div class="m">C'(${n},${r}) = C(${n} + ${r} − 1, ${r}) = C(${n + r - 1}, ${r}) = <b>${fmt(cRep)}</b></div>`;
+  h += `</div>`;
+  
+  // Permutasi Siklis
+  h += `<div class="card"><h3><span>Permutasi Siklis (Melingkar)</span>(n − 1)!</h3>`;
+  h += `<p>Menyusun n objek dalam lingkaran (posisi relatif diputar dianggap sama):</p>`;
+  h += `<div class="m">P_siklis = (${n} − 1)! = ${n - 1}! = <b>${fmt(pCirc)}</b></div>`;
+  h += `</div>`;
+  
+  h += `<div class="final"><div class="big">C'(${n},${r}) = ${fmt(cRep)} &nbsp;|&nbsp; P_siklis(${n}) = ${fmt(pCirc)}</div></div>`;
+  
+  h += renderListSection('Daftar Kombinasi dengan Pengulangan', items, `Elemen boleh berulang (mis. A A B).`);
+  $('res').innerHTML = h;
+  startList(() => generateCombRepetition(items, r), cRep);
+}
+
+/* Feature 3: Hubungan P(n,r) = C(n,r) * r! View */
+function renderRelation(n, r, items) {
+  const cVal = calculateCombination(n, r);
+  const pVal = calculatePermutation(n, r);
+  const rFact = factorial(r);
+  
+  const combs = Array.from(generateCombinations(items, r));
+  
+  let h = `<div class="sum"><span class="chip">n = <b>${n}</b></span><span class="chip">r = <b>${r}</b></span><span class="chip">Moda: <b>Hubungan Permutasi &amp; Kombinasi</b></span></div>`;
+  h += `<div class="card"><h3><span>Bukti Visual</span>Mengapa Kombinasi Lebih Sedikit dari Permutasi</h3>`;
+  h += `<p>Setiap 1 Kombinasi (himpunan tanpa urutan) menghasilkan tepat <b>r! = ${rFact}</b> susunan permutasi ketika urutannya diatur.</p>`;
+  h += `<div class="m">P(${n},${r}) = C(${n},${r}) × r! &nbsp;&rArr;&nbsp; ${fmt(pVal)} = ${fmt(cVal)} × ${rFact}</div>`;
+  h += `</div>`;
+  
+  h += `<div class="card"><h3><span>Pengelompokan Permutasi berdasarkan Kombinasinya</span></h3>`;
+  h += `<p>Berikut adalah pembagian ${fmt(pVal)} permutasi ke dalam ${fmt(cVal)} kelompok kombinasi:</p>`;
+  h += `<div class="lst" style="max-height:420px; display:block;">`;
+  
+  combs.forEach((comb, idx) => {
+    const perms = Array.from(generatePermutations(comb, r));
+    h += `<div style="background:var(--ivory); border:2px solid #d6c3a3; border-radius:12px; padding:8px 12px; margin-bottom:8px;">`;
+    h += `<strong>Kombinasi #${idx+1}: { ${comb.map(esc).join(', ')} }</strong> `;
+    h += `<span style="font-size:0.88rem; color:var(--wood2)">&rarr; Membentuk ${perms.length} permutasi (${r}!):</span><br>`;
+    h += `<div style="display:flex; flex-wrap:wrap; gap:6px; margin-top:6px;">`;
+    perms.forEach(p => {
+      h += `<span class="it" style="background:#fff;">${p.map(esc).join(' ')}</span>`;
+    });
+    h += `</div></div>`;
+  });
+  
+  h += `</div></div>`;
+  $('res').innerHTML = h;
+  currentList = [];
+}
+
+/* Feature 6: Interactive Backtracking Step-by-Step Animator */
+let animState = { steps: [], index: 0, timer: null, speed: 800 };
+
+function renderAnimation(n, r, items) {
+  if (n > 5 || r > 4) {
+    $('res').innerHTML = `<div class="card"><h3>Animasi Visual Membutuhkan Ukuran Kecil</h3><p>Gunakan n &le; 5 dan r &le; 4 agar pohon backtracking muat ditampilkan secara visual.</p></div>`;
+    return;
+  }
+  
+  // Precompute steps
+  const steps = [];
+  const treeNodes = [];
+  let nodeIdCounter = 0;
+  
+  function buildTree(current, available, depth) {
+    const nodeId = nodeIdCounter++;
+    const node = { id: nodeId, label: current.join(''), depth, children: [], status: 'visit' };
+    treeNodes.push(node);
+    
+    steps.push({
+      action: 'PUSH',
+      path: current.slice(),
+      nodeId,
+      msg: `Pilih item "${current[current.length-1] || 'Root'}" (Kedalaman ${depth})`
+    });
+    
+    if (current.length === r) {
+      steps.push({ action: 'FOUND', path: current.slice(), nodeId, msg: `✨ Susunan ditemukan: [ ${current.join(', ')} ]` });
+      return node;
+    }
+    
+    for (let i = 0; i < available.length; i++) {
+      const nextItem = available[i];
+      const nextAvail = available.filter((_, idx) => idx !== i);
+      current.push(nextItem);
+      const childNode = buildTree(current, nextAvail, depth + 1);
+      node.children.push(childNode);
+      current.pop();
+      steps.push({ action: 'BACKTRACK', path: current.slice(), nodeId, msg: `Backtrack dari kedalaman ${depth+1} ke ${depth}` });
+    }
+    return node;
+  }
+
+  nodeIdCounter = 0;
+  const rootNode = buildTree([], items.slice(0, n), 0);
+  animState.steps = steps;
+  animState.index = 0;
+  if (animState.timer) clearInterval(animState.timer);
+
+  let h = `<div class="sum"><span class="chip">Moda: <b>Visualizer Backtracking (Permutasi)</b></span></div>`;
+  h += `<div class="card"><h3><span>Visualisasi Pohon Keputusan</span>Animasi Langkah-demi-Langkah P(${n},${r})</h3>`;
+  h += `<p>Proses eksplorasi algoritma generator backtracking saat memilih item, masuk lebih dalam (recursion depth), dan melakukan backtrack.</p>`;
+  
+  h += `<div class="anim-controls">`;
+  h += `<button type="button" class="anim-btn" id="anim-prev">⏮️ Mundur</button>`;
+  h += `<button type="button" class="anim-btn" id="anim-play">▶️ Play</button>`;
+  h += `<button type="button" class="anim-btn" id="anim-next">Maju ⏭️</button>`;
+  h += `<label style="font-size:0.9rem">Kecepatan: <input type="range" id="anim-speed" min="200" max="1500" value="800" style="vertical-align:middle"></label>`;
+  h += `</div>`;
+  
+  h += `<div id="anim-msg" style="margin-top:10px; font-weight:600; font-size:1.05rem; color:var(--wood2)">Siap memulai animasi...</div>`;
+  h += `<div class="tree-container"><svg id="tree-svg" class="tree-svg"></svg></div>`;
+  h += `</div>`;
+  
+  $('res').innerHTML = h;
+  
+  // Render static SVG Tree layout
+  drawSVGTree(rootNode);
+  updateAnimStep(0);
+  
+  $('anim-prev').onclick = () => stepAnim(-1);
+  $('anim-next').onclick = () => stepAnim(1);
+  $('anim-play').onclick = togglePlayAnim;
+  $('anim-speed').oninput = (e) => { animState.speed = 1700 - e.target.value; if(animState.timer) { togglePlayAnim(); togglePlayAnim(); } };
+}
+
+function drawSVGTree(rootNode) {
+  const svg = $('tree-svg');
+  if (!svg) return;
+  svg.innerHTML = '';
+  
+  // Calculate positions
+  let leafCount = 0;
+  function assignCoords(node, depth) {
+    if (node.children.length === 0) {
+      node.x = (leafCount + 0.5) * 60;
+      leafCount++;
+    } else {
+      node.children.forEach(c => assignCoords(c, depth + 1));
+      node.x = (node.children[0].x + node.children[node.children.length - 1].x) / 2;
+    }
+    node.y = depth * 60 + 40;
+  }
+  assignCoords(rootNode, 0);
+  
+  const width = Math.max(600, leafCount * 65);
+  svg.setAttribute('viewBox', `0 0 ${width} 320`);
+  
+  // Render lines
+  function drawLines(node) {
+    node.children.forEach(child => {
+      const line = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+      line.setAttribute('x1', node.x); line.setAttribute('y1', node.y);
+      line.setAttribute('x2', child.x); line.setAttribute('y2', child.y);
+      line.setAttribute('stroke', '#c9ae88'); line.setAttribute('stroke-width', '2');
+      svg.appendChild(line);
+      drawLines(child);
+    });
+  }
+  drawLines(rootNode);
+  
+  // Render circles and text
+  function drawNodes(node) {
+    const g = document.createElementNS('http://www.w3.org/2000/svg', 'g');
+    g.setAttribute('id', `node-${node.id}`);
+    
+    const circle = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
+    circle.setAttribute('cx', node.x); circle.setAttribute('cy', node.y); circle.setAttribute('r', '18');
+    circle.setAttribute('fill', '#fbf6e9'); circle.setAttribute('stroke', '#a98462'); circle.setAttribute('stroke-width', '2.5');
+    
+    const text = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+    text.setAttribute('x', node.x); text.setAttribute('y', node.y + 5);
+    text.setAttribute('text-anchor', 'middle'); text.setAttribute('font-family', 'Fredoka'); text.setAttribute('font-size', '12px');
+    text.setAttribute('font-weight', '600'); text.setAttribute('fill', '#5a3a28');
+    text.textContent = node.label || '∅';
+    
+    g.appendChild(circle); g.appendChild(text);
+    svg.appendChild(g);
+    
+    node.children.forEach(drawNodes);
+  }
+  drawNodes(rootNode);
+}
+
+function updateAnimStep(idx) {
+  if (idx < 0 || idx >= animState.steps.length) return;
+  animState.index = idx;
+  const step = animState.steps[idx];
+  
+  $('anim-msg').textContent = `[Langkah ${idx+1}/${animState.steps.length}] ${step.msg}`;
+  
+  // Highlight active SVG node
+  document.querySelectorAll('#tree-svg g').forEach(g => {
+    const circle = g.querySelector('circle');
+    circle.setAttribute('fill', '#fbf6e9');
+    circle.setAttribute('stroke', '#a98462');
+  });
+  
+  const activeG = $(`node-${step.nodeId}`);
+  if (activeG) {
+    const circle = activeG.querySelector('circle');
+    if (step.action === 'FOUND') {
+      circle.setAttribute('fill', '#a9c18a');
+      circle.setAttribute('stroke', '#4e7330');
+    } else {
+      circle.setAttribute('fill', '#f7e08f');
+      circle.setAttribute('stroke', '#8a4f30');
+    }
+  }
+}
+
+function stepAnim(delta) {
+  const nextIdx = animState.index + delta;
+  if (nextIdx >= 0 && nextIdx < animState.steps.length) {
+    updateAnimStep(nextIdx);
+  } else if (nextIdx >= animState.steps.length && animState.timer) {
+    togglePlayAnim();
+  }
+}
+
+function togglePlayAnim() {
+  const btn = $('anim-play');
+  if (animState.timer) {
+    clearInterval(animState.timer);
+    animState.timer = null;
+    btn.textContent = '▶️ Play';
+  } else {
+    btn.textContent = '⏸️ Pause';
+    animState.timer = setInterval(() => {
+      stepAnim(1);
+    }, animState.speed);
+  }
+}
+
+/* Feature 1: Export Result to .txt File */
+function renderListSection(title, items, note) {
+  return `<div class="card">
+    <h3><span>Daftar Hasil</span>${title}</h3>
+    <p>Item: <b>${items.map(esc).join(', ')}</b>. ${note}</p>
+    <div class="lcount" id="lcount"></div>
+    <div class="lst" id="lst"></div>
+    <div class="lbtns" id="lbtns">
+      <button type="button" id="more">Tampilkan 500 lagi</button>
+      <button type="button" id="all">Tampilkan semua</button>
+    </div>
+  </div>`;
+}
+
+const LIST_CAP = 10000;
+let L = null;
+
+function startList(generatorFn, total) {
+  const gen = generatorFn();
+  const limit = total > BigInt(LIST_CAP) ? LIST_CAP : Number(total);
+  currentList = [];
+  L = { gen, shown: 0, limit, total, token: {} };
+  showMore(300);
+  $('more').onclick = () => showMore(500);
+  $('all').onclick = () => showAll();
+}
+
+function showMore(k) {
+  if (!L) return;
+  const lst = $('lst');
+  let html = '';
+  const stop = Math.min(L.shown + k, L.limit);
+  while (L.shown < stop) {
+    const nx = L.gen.next();
+    if (nx.done) break;
+    L.shown++;
+    const a = nx.value;
+    const strVal = a.length ? a.join(' ') : '∅ (kosong)';
+    currentList.push(strVal);
+    html += `<span class="it"><small>${L.shown}.</small>${esc(strVal)}</span>`;
+  }
+  lst.insertAdjacentHTML('beforeend', html);
+  updateListInfo();
+}
+
+function updateListInfo() {
+  const done = L.shown >= L.limit;
+  let t = `Menampilkan ${fmt(L.shown)} dari ${fmt(L.total)} kemungkinan.`;
+  if (done && L.total > BigInt(L.limit)) t += ` (Dibatasi ${fmt(L.limit)} pertama untuk stabilitas).`;
+  $('lcount').textContent = t;
+  $('lbtns').classList.toggle('hide', done);
+}
+
+function showAll() {
+  const tk = L.token;
+  (function step() {
+    if (!L || L.token !== tk) return;
+    showMore(2000);
+    if (L.shown < L.limit) setTimeout(step, 0);
+  })();
+}
+
+function exportTxtFile() {
+  if (!currentList || currentList.length === 0) {
+    alert('Belum ada data hasil yang dapat diunduh.');
+    return;
+  }
+  const content = `=== HASIL PERHITUNGAN ${mode.toUpperCase()} ===\nTotal Kemungkinan: ${currentList.length}\n\nDaftar:\n` + 
+                  currentList.map((item, idx) => `${idx + 1}. ${item}`).join('\n');
+  
+  const blob = new Blob([content], { type: 'text/plain;charset=utf-8' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = `permutasi_kombinasi_${mode}.txt`;
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+  URL.revokeObjectURL(url);
+}
+
+function checkStale() {
+  if (!computed) return;
+  const sn = $('n').value.trim(), sr = $('r').value.trim();
+  const same = +sn === computed.n && +sr === computed.r && $('items').value.trim() === computed.raw && mode === computed.mode;
+  $('stale').classList.toggle('on', !same);
+}
+
+function setMode(m) {
+  document.querySelectorAll('.tab').forEach(t => t.setAttribute('aria-selected', t.dataset.m === m));
+  if (m === 'ref') {
+    $('calc').classList.add('hide'); $('ref').classList.remove('hide'); $('ttl').textContent = 'Rumus Matematika'; return;
+  }
+  mode = m;
+  const titles = {
+    perm: 'Permutasi Standar',
+    comb: 'Kombinasi Standar',
+    repeats: 'Unsur Sama (Multiset)',
+    rep_circ: 'Berulang & Siklis',
+    relation: 'Hubungan P & C',
+    anim: 'Visualizer Backtracking'
+  };
+  $('ttl').textContent = titles[m] || 'Permutasi & Kombinasi';
+  $('ref').classList.add('hide'); $('calc').classList.remove('hide');
+  
+  const v = readInputs();
+  if (v) render(v);
+}
+
+function reset() {
+  applyPreset('perm', 3, 2, 'A, B, C');
+}
+
+function buildRef() {
+  $('ref').innerHTML = `
+  <div class="form"><h2>Rumus Permutasi &amp; Kombinasi</h2></div>
+  <div class="card"><h3>1. Permutasi Standar</h3><div class="m">P(n,r) = ${frac('n!', '(n − r)!')}</div><p>Urutan elemen memperhitungkan susunan.</p></div>
+  <div class="card"><h3>2. Kombinasi Standar</h3><div class="m">C(n,r) = ${frac('n!', 'r! (n − r)!')}</div><p>Urutan elemen tidak diperhitungkan.</p></div>
+  <div class="card"><h3>3. Permutasi Unsur Sama</h3><div class="m">P = ${frac('n!', 'n₁! n₂! ... nₖ!')}</div><p>Digunakan saat terdapat elemen yang identik/berulang.</p></div>
+  <div class="card"><h3>4. Kombinasi Pengulangan</h3><div class="m">C'(n,r) = C(n + r − 1, r)</div><p>Objek dapat dipilih kembali lebih dari sekali.</p></div>
+  <div class="card"><h3>5. Permutasi Siklis</h3><div class="m">P_siklis = (n − 1)!</div><p>Pengaturan posisi dalam lingkaran melingkar.</p></div>
+  `;
+}
+
+// Event Listeners
+document.querySelectorAll('.tab').forEach(t => t.onclick = () => setMode(t.dataset.m));
+document.querySelectorAll('.ud button').forEach(b => b.onclick = () => {
+  const el = $(b.dataset.t);
+  let v = parseInt(el.value, 10); if (isNaN(v)) v = 0;
+  el.value = Math.max(0, Math.min(100, v + +b.dataset.d));
+  checkStale();
 });
-['n','r','items'].forEach(id=>$(id).addEventListener('input',checkStale));
-['n','r','items'].forEach(id=>$(id).addEventListener('keydown',e=>{if(e.key==='Enter')calc()}));
-$('go').onclick=calc;$('reset').onclick=reset;
-buildRef();calc();
+['n', 'r', 'items'].forEach(id => $(id).addEventListener('input', checkStale));
+['n', 'r', 'items'].forEach(id => $(id).addEventListener('keydown', e => { if (e.key === 'Enter') calc(); }));
+$('go').onclick = calc;
+$('reset').onclick = reset;
+$('export').onclick = exportTxtFile;
+
+buildRef();
+calc();
 </script>
 </body>
 </html>
