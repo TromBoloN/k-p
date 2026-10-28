@@ -26,7 +26,8 @@ background-image:linear-gradient(rgba(120,90,60,.1) 1px,transparent 1px),linear-
 .pic.c{bottom:6px;left:12px;font-size:2.6rem}.pic.d{bottom:6px;right:14px;font-size:2.6rem}.pic.e{bottom:4px;left:50%;font-size:1.8rem;letter-spacing:.4em;transform:translateX(-50%);opacity:.9}
 .pic.f{bottom:4px;left:22%;font-size:2rem}
 .bob{animation:bob 3.6s ease-in-out infinite}@keyframes bob{50%{transform:translateY(-5px) rotate(3deg)}}
-.layout{display:grid;grid-template-columns:1fr 190px;gap:22px;align-items:start}
+.layout{display:grid;grid-template-columns:minmax(0,1fr) 190px;gap:22px;align-items:start}
+.layout>section{min-width:0}
 nav{display:flex;flex-direction:column;gap:14px;padding-top:30px}
 .tab{position:relative;font:600 1.05rem 'Fredoka';color:#8a6a50;background:var(--ivory);border:2px dashed #d6c3a3;border-radius:12px 6px 12px 6px;padding:14px 46px 14px 16px;cursor:pointer;text-align:left;transition:transform .2s,background .2s;transform:rotate(-2deg);min-height:48px}
 .tab:after{content:"";position:absolute;right:12px;top:50%;width:24px;height:24px;margin-top:-12px;border-radius:50%;border:4px solid #d9b45c;background:#f7e6a8}
@@ -79,10 +80,11 @@ s{text-decoration:line-through;text-decoration-thickness:2px;text-decoration-col
 .ref h2{margin:6px 0;font-size:1.3rem}
 .ref .card{margin-top:14px}
 .ref ul{margin:6px 0 0;padding-left:20px;line-height:1.6}
+.card p,.final p,.lcount,.err,.note{overflow-wrap:anywhere}
 .hide{display:none!important}
-@media(max-width:760px){.board{margin:10px;padding:74px 12px 84px;border-width:8px}.layout{grid-template-columns:1fr}
+@media(max-width:760px){.board{margin:10px;padding:74px 12px 84px;border-width:8px}.layout{grid-template-columns:minmax(0,1fr)}
 nav{order:-1;flex-direction:row;gap:8px;padding-top:6px}.tab{flex:1;padding:12px 8px;text-align:center;font-size:.9rem;transform:none!important}.tab:after{display:none}
-.row label{min-width:70px;font-size:1.4rem}.pic{font-size:1.6rem}.pic.c,.pic.d{font-size:2rem}.pic.f{display:none}}
+.row{gap:8px}.row label{min-width:64px;font-size:1.3rem}.spin input{font-size:1.4rem}#items{font-size:1rem}.final .big{font-size:1.3rem}.pic{font-size:1.6rem}.pic.c,.pic.d{font-size:2rem}.pic.f{display:none}}
 @media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
 .row.bad #items{color:var(--err)}
 #items{font-size:1.15rem}
@@ -106,7 +108,7 @@ nav{order:-1;flex-direction:row;gap:8px;padding-top:6px}.tab{flex:1;padding:12px
   <div class="form">
    <div class="row" id="rn"><label for="n">Input n :</label><div class="spin"><input id="n" type="number" inputmode="numeric" step="1" value="5"><div class="ud"><button type="button" data-t="n" data-d="1" aria-label="Naikkan n">▲</button><button type="button" data-t="n" data-d="-1" aria-label="Turunkan n">▼</button></div></div></div>
    <div class="row" id="rr"><label for="r">Input r :</label><div class="spin"><input id="r" type="number" inputmode="numeric" step="1" value="3"><div class="ud"><button type="button" data-t="r" data-d="1" aria-label="Naikkan r">▲</button><button type="button" data-t="r" data-d="-1" aria-label="Turunkan r">▼</button></div></div></div>
-   <div class="row" id="ri"><label for="items">Item :</label><div class="spin"><input id="items" type="text" autocomplete="off" placeholder="mis. A, B, C (kosong = otomatis)"></div></div>
+   <div class="row" id="ri"><label for="items">Item :</label><div class="spin"><input id="items" type="text" autocomplete="off" placeholder="A, B, C (opsional)"></div></div>
    <div class="err" id="err" role="alert"></div>
    <div class="btns"><button class="go" id="go" type="button">🐾 Hitung! 🐾</button><button class="rs" id="reset" type="button">Reset</button></div>
    <p class="note">n = jumlah seluruh objek, r = jumlah objek yang dipilih. Aplikasi ini menghitung permutasi dan kombinasi standar tanpa pengulangan elemen (0 ≤ r ≤ n ≤ 100). Kolom Item boleh diisi nama sendiri dipisah koma (mis. Ani, Budi, Cici); jika diisi, nilai n mengikuti jumlah item.</p>
